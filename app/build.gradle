@@ -13,7 +13,7 @@ ext {
 }
 
 android {
-    namespace "com.termux"
+    namespace "com.droidshell.app"
 
     compileSdkVersion project.properties.compileSdkVersion.toInteger()
     ndkVersion = System.getenv("JITPACK_NDK_VERSION") ?: project.properties.ndkVersion
@@ -46,19 +46,21 @@ android {
         versionCode 118
         versionName "0.118.0"
 
+        applicationId "com.droidshell.app"
+
         if (appVersionName) versionName = appVersionName
         validateVersionName(versionName)
 
         buildConfigField "String", "TERMUX_PACKAGE_VARIANT", "\"" + project.ext.packageVariant + "\"" // Used by TermuxApplication class
 
-        manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.termux"
-        manifestPlaceholders.TERMUX_APP_NAME = "Termux"
-        manifestPlaceholders.TERMUX_API_APP_NAME = "Termux:API"
-        manifestPlaceholders.TERMUX_BOOT_APP_NAME = "Termux:Boot"
-        manifestPlaceholders.TERMUX_FLOAT_APP_NAME = "Termux:Float"
-        manifestPlaceholders.TERMUX_STYLING_APP_NAME = "Termux:Styling"
-        manifestPlaceholders.TERMUX_TASKER_APP_NAME = "Termux:Tasker"
-        manifestPlaceholders.TERMUX_WIDGET_APP_NAME = "Termux:Widget"
+        manifestPlaceholders.TERMUX_PACKAGE_NAME = "com.droidshell.app"
+        manifestPlaceholders.TERMUX_APP_NAME = "DroidShell"
+        manifestPlaceholders.TERMUX_API_APP_NAME = "DroidShell:API"
+        manifestPlaceholders.TERMUX_BOOT_APP_NAME = "DroidShell:Boot"
+        manifestPlaceholders.TERMUX_FLOAT_APP_NAME = "DroidShell:Float"
+        manifestPlaceholders.TERMUX_STYLING_APP_NAME = "DroidShell:Styling"
+        manifestPlaceholders.TERMUX_TASKER_APP_NAME = "DroidShell:Tasker"
+        manifestPlaceholders.TERMUX_WIDGET_APP_NAME = "DroidShell:Widget"
 
         externalNativeBuild {
             ndkBuild {
@@ -187,7 +189,12 @@ def downloadBootstrap(String arch, String expectedChecksum, String version) {
         }
     }
 
-    def remoteUrl = "https://github.com/termux/termux-packages/releases/download/bootstrap-" + version + "/bootstrap-" + arch + ".zip"
+    // Bootstrap downloads come from the fork's releases. With a custom
+    // package name/prefix the official Termux bootstrap cannot be used,
+    // so the bootstrap must be rebuilt from termux-packages and published
+    // under this URL (Phase 2). Overridable via TERMUX_BOOTSTRAP_BASE_URL.
+    def bootstrapBaseUrl = System.getenv("TERMUX_BOOTSTRAP_BASE_URL") ?: "https://github.com/CodeDev-404/termux-packages/releases/download"
+    def remoteUrl = bootstrapBaseUrl + "/bootstrap-" + version + "/bootstrap-" + arch + ".zip"
     logger.quiet("Downloading " + remoteUrl + " ...")
 
     file.parentFile.mkdirs()
