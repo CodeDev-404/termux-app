@@ -122,6 +122,16 @@ public class TermuxAppSharedPreferences extends AppSharedPreferences {
 
 
 
+    public boolean isTerminalReadOnly() {
+        return SharedPreferenceUtils.getBoolean(mSharedPreferences, TERMUX_APP.KEY_TERMINAL_READ_ONLY, TERMUX_APP.DEFAULT_VALUE_TERMINAL_READ_ONLY);
+    }
+
+    public void setTerminalReadOnly(boolean value) {
+        SharedPreferenceUtils.setBoolean(mSharedPreferences, TERMUX_APP.KEY_TERMINAL_READ_ONLY, value, false);
+    }
+
+
+
     public static int[] getDefaultFontSizes(Context context) {
         float dipInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, context.getResources().getDisplayMetrics());
 

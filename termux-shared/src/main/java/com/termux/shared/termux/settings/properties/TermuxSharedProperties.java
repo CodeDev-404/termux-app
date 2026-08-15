@@ -602,6 +602,14 @@ public abstract class TermuxSharedProperties {
         return (boolean) getInternalPropertyValue(TermuxPropertyConstants.KEY_EXTRA_KEYS_TEXT_ALL_CAPS, true);
     }
 
+    public boolean isSessionChangeSwipeEnabled() {
+        return (boolean) getInternalPropertyValue(TermuxPropertyConstants.KEY_SESSION_CHANGE_SWIPE, true);
+    }
+
+    public boolean isSessionDrawerGroupingEnabled() {
+        return (boolean) getInternalPropertyValue(TermuxPropertyConstants.KEY_SESSION_DRAWER_GROUPING, true);
+    }
+
     public boolean shouldSoftKeyboardBeHiddenOnStartup() {
         return (boolean) getInternalPropertyValue(TermuxPropertyConstants.KEY_HIDE_SOFT_KEYBOARD_ON_STARTUP, true);
     }

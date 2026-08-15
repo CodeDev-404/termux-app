@@ -300,6 +300,13 @@ public class TermuxTerminalViewClient extends TermuxTerminalViewClientBase {
         return handleVirtualKeys(keyCode, e, false);
     }
 
+    @Override
+    public boolean onHorizontalFling(boolean next) {
+        if (!mActivity.getProperties().isSessionChangeSwipeEnabled()) return false;
+        mTermuxTerminalSessionActivityClient.switchToSession(next);
+        return true;
+    }
+
     /** Handle dedicated volume buttons as virtual keys if applicable. */
     private boolean handleVirtualKeys(int keyCode, KeyEvent event, boolean down) {
         InputDevice inputDevice = event.getDevice();

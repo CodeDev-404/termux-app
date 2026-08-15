@@ -188,6 +188,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
     private static final int CONTEXT_MENU_HELP_ID = 7;
     private static final int CONTEXT_MENU_SETTINGS_ID = 8;
     private static final int CONTEXT_MENU_REPORT_ID = 9;
+    private static final int CONTEXT_MENU_TOGGLE_READ_ONLY = 12;
 
     private static final String ARG_TERMINAL_TOOLBAR_TEXT_INPUT = "terminal_toolbar_text_input";
     private static final String ARG_ACTIVITY_RECREATED = "activity_recreated";
@@ -489,6 +490,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         // Set termux terminal view
         mTerminalView = findViewById(R.id.terminal_view);
         mTerminalView.setTerminalViewClient(mTermuxTerminalViewClient);
+        mTerminalView.setReadOnly(mPreferences.isTerminalReadOnly());
 
         if (mTermuxTerminalViewClient != null)
             mTermuxTerminalViewClient.onCreate();
@@ -645,6 +647,7 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         menu.add(Menu.NONE, CONTEXT_MENU_KILL_PROCESS_ID, Menu.NONE, getResources().getString(R.string.action_kill_process, getCurrentSession().getPid())).setEnabled(currentSession.isRunning());
         menu.add(Menu.NONE, CONTEXT_MENU_STYLING_ID, Menu.NONE, R.string.action_style_terminal);
         menu.add(Menu.NONE, CONTEXT_MENU_TOGGLE_KEEP_SCREEN_ON, Menu.NONE, R.string.action_toggle_keep_screen_on).setCheckable(true).setChecked(mPreferences.shouldKeepScreenOn());
+        menu.add(Menu.NONE, CONTEXT_MENU_TOGGLE_READ_ONLY, Menu.NONE, R.string.action_toggle_read_only).setCheckable(true).setChecked(mTerminalView.isReadOnly());
         menu.add(Menu.NONE, CONTEXT_MENU_HELP_ID, Menu.NONE, R.string.action_open_help);
         menu.add(Menu.NONE, CONTEXT_MENU_SETTINGS_ID, Menu.NONE, R.string.action_open_settings);
         menu.add(Menu.NONE, CONTEXT_MENU_REPORT_ID, Menu.NONE, R.string.action_report_issue);
@@ -688,6 +691,9 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
                 return true;
             case CONTEXT_MENU_TOGGLE_KEEP_SCREEN_ON:
                 toggleKeepScreenOn();
+                return true;
+            case CONTEXT_MENU_TOGGLE_READ_ONLY:
+                toggleReadOnly();
                 return true;
             case CONTEXT_MENU_HELP_ID:
                 ActivityUtils.startActivity(this, new Intent(this, HelpActivity.class));
@@ -756,6 +762,13 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
             mTerminalView.setKeepScreenOn(true);
             mPreferences.setKeepScreenOn(true);
         }
+    }
+
+    private void toggleReadOnly() {
+        boolean readOnly = !mTerminalView.isReadOnly();
+        mTerminalView.setReadOnly(readOnly);
+        mPreferences.setTerminalReadOnly(readOnly);
+        showToast(getResources().getString(readOnly ? R.string.msg_read_only_enabled : R.string.msg_read_only_disabled), true);
     }
 
 

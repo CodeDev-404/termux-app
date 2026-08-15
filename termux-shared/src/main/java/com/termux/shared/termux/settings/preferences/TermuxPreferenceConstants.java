@@ -124,6 +124,13 @@ public final class TermuxPreferenceConstants {
         public static final String KEY_KEEP_SCREEN_ON = "screen_always_on";
         public static final boolean DEFAULT_VALUE_KEEP_SCREEN_ON = false;
 
+        /**
+         * Defines the key for whether terminal view is in read-only mode, which blocks all input
+         * to the terminal session, but allows scrolling and text selection.
+         */
+        public static final String KEY_TERMINAL_READ_ONLY = "terminal_read_only";
+        public static final boolean DEFAULT_VALUE_TERMINAL_READ_ONLY = false;
+
 
         /**
          * Defines the key for font size of termux terminal view.

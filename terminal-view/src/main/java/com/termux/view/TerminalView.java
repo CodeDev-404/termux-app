@@ -133,6 +133,9 @@ public final class TerminalView extends View {
 
     private static final String LOG_TAG = "TerminalView";
 
+    /** Whether input to the terminal session is blocked (read-only mode). */
+    private boolean mReadOnly;
+
     public TerminalView(Context context, AttributeSet attributes) { // NO_UCD (unused code)
         super(context, attributes);
         mGestureRecognizer = new GestureAndScaleRecognizer(context, new GestureAndScaleRecognizer.Listener() {
@@ -198,6 +201,13 @@ public final class TerminalView extends View {
                 if (mEmulator == null) return true;
                 // Do not start scrolling until last fling has been taken care of:
                 if (!mScroller.isFinished()) return true;
+
+                // Handle horizontal fling to switch sessions if it is clearly horizontal dominant
+                // and not a text selection gesture or a mouse tracking scroll.
+                if (!isSelectingText() && !mEmulator.isMouseTrackingActive() &&
+                    Math.abs(velocityX) > Math.abs(velocityY) * 2 && Math.abs(velocityX) > 400) {
+                    if (mClient.onHorizontalFling(velocityX < 0)) return true;
+                }
 
                 final boolean mouseTrackingAtStartOfFling = mEmulator.isMouseTrackingActive();
                 float SCALE = 0.25f;
@@ -278,6 +288,26 @@ public final class TerminalView extends View {
      */
     public void setIsTerminalViewKeyLoggingEnabled(boolean value) {
         TERMINAL_VIEW_KEY_LOGGING_ENABLED = value;
+    }
+
+    /**
+     * Sets whether terminal view is in read-only mode or not. In read-only mode, all input to the
+     * terminal session is blocked, but scrolling and text selection still work.
+     *
+     * @param readOnly The boolean value that defines the state.
+     */
+    public void setReadOnly(boolean readOnly) {
+        mReadOnly = readOnly;
+        if (readOnly) stopTextSelectionMode();
+    }
+
+    /**
+     * Check if terminal view is in read-only mode or not.
+     *
+     * @return Returns the boolean value that defines the state.
+     */
+    public boolean isReadOnly() {
+        return mReadOnly;
     }
 
 
@@ -615,6 +645,8 @@ public final class TerminalView extends View {
             if (event.isButtonPressed(MotionEvent.BUTTON_SECONDARY)) {
                 if (action == MotionEvent.ACTION_DOWN) showContextMenu();
                 return true;
+            } else if (mReadOnly) {
+                // Ignore mouse button actions, like paste and mouse tracking, in read-only mode.
             } else if (event.isButtonPressed(MotionEvent.BUTTON_TERTIARY)) {
                 ClipboardManager clipboardManager = (ClipboardManager) getContext().getSystemService(Context.CLIPBOARD_SERVICE);
                 ClipData clipData = clipboardManager.getPrimaryClip();
@@ -777,6 +809,9 @@ public final class TerminalView extends View {
         if (mClient.onKeyDown(keyCode, event, mTermSession)) {
             invalidate();
             return true;
+        } else if (mReadOnly) {
+            // Block all input to the terminal in read-only mode.
+            return true;
         } else if (event.isSystem() && (!mClient.shouldBackButtonBeMappedToEscape() || keyCode != KeyEvent.KEYCODE_BACK)) {
             return super.onKeyDown(keyCode, event);
         } else if (event.getAction() == KeyEvent.ACTION_MULTIPLE && keyCode == KeyEvent.KEYCODE_UNKNOWN) {
@@ -850,6 +885,7 @@ public final class TerminalView extends View {
         }
 
         if (mTermSession == null) return;
+        if (mReadOnly) return;
 
         // Ensure cursor is shown when a key is pressed down like long hold on (arrow) keys
         if (mEmulator != null)

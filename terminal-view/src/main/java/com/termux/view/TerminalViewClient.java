@@ -46,6 +46,15 @@ public interface TerminalViewClient {
 
     boolean onKeyUp(int keyCode, KeyEvent e);
 
+    /**
+     * Called when a horizontal fling/swipe gesture is detected on the terminal view.
+     *
+     * @param next If {@code true}, the client should switch to the next session, otherwise to the
+     *             previous one.
+     * @return Return {@code true} if the swipe was handled by the client.
+     */
+    boolean onHorizontalFling(boolean next);
+
     boolean onLongPress(MotionEvent event);
 
 

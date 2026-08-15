@@ -53,6 +53,11 @@ public class TermuxTerminalViewClientBase implements TerminalViewClient {
     }
 
     @Override
+    public boolean onHorizontalFling(boolean next) {
+        return false;
+    }
+
+    @Override
     public boolean onLongPress(MotionEvent event) {
         return false;
     }

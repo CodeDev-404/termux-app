@@ -1,0 +1,11 @@
+<com.google.android.material.textview.MaterialTextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/session_group_title"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/session_background_selected"
+    android:ellipsize="marquee"
+    android:gravity="start|center_vertical"
+    android:padding="6dip"
+    android:textAllCaps="true"
+    android:textSize="12sp"
+    android:textStyle="bold" />

@@ -124,6 +124,8 @@ public final class TermuxPropertyConstants {
 
     /** Defines the key for whether text for the extra keys buttons should be all capitalized automatically */
     public static final String KEY_EXTRA_KEYS_TEXT_ALL_CAPS =  "extra-keys-text-all-caps"; // Default: "extra-keys-text-all-caps"
+    public static final String KEY_SESSION_CHANGE_SWIPE = "session-change-swipe"; // Default: "session-change-swipe"
+    public static final String KEY_SESSION_DRAWER_GROUPING = "session-drawer-grouping"; // Default: "session-drawer-grouping"
 
 
 
@@ -399,6 +401,8 @@ public final class TermuxPropertyConstants {
         KEY_EXTRA_KEYS_TEXT_ALL_CAPS,
         KEY_HIDE_SOFT_KEYBOARD_ON_STARTUP,
         KEY_RUN_TERMUX_AM_SOCKET_SERVER,
+        KEY_SESSION_CHANGE_SWIPE,
+        KEY_SESSION_DRAWER_GROUPING,
         KEY_TERMINAL_ONCLICK_URL_OPEN,
         KEY_USE_CTRL_SPACE_WORKAROUND,
         KEY_USE_FULLSCREEN,
@@ -459,7 +463,9 @@ public final class TermuxPropertyConstants {
      */
     public static final Set<String> TERMUX_DEFAULT_TRUE_BOOLEAN_BEHAVIOUR_PROPERTIES_LIST = new HashSet<>(Arrays.asList(
         KEY_EXTRA_KEYS_TEXT_ALL_CAPS,
-        KEY_RUN_TERMUX_AM_SOCKET_SERVER
+        KEY_RUN_TERMUX_AM_SOCKET_SERVER,
+        KEY_SESSION_CHANGE_SWIPE,
+        KEY_SESSION_DRAWER_GROUPING
     ));
 
     /** Defines the set for keys loaded by termux that have default inverted boolean behaviour with false as default.

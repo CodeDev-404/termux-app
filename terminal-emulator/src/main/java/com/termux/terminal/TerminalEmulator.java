@@ -223,6 +223,9 @@ public final class TerminalEmulator {
      */
     private int mTopMargin, mBottomMargin, mLeftMargin, mRightMargin;
 
+    /** Whether reverse wrap-around (DECRWRAP, DECSET/DECRESET 45) is enabled or not. */
+    private boolean mReverseWrap;
+
     /**
      * If the next character to be emitted will be automatically wrapped to the next line. Used to disambiguate the case
      * where the cursor is positioned on the last column (mColumns-1). When standing there, a written character will be
@@ -592,6 +595,9 @@ public final class TerminalEmulator {
                     int previousRow = mCursorRow - 1;
                     if (previousRow >= 0 && mScreen.getLineWrap(previousRow)) {
                         mScreen.clearLineWrap(previousRow);
+                        setCursorRowCol(previousRow, mRightMargin - 1);
+                    } else if (mReverseWrap && previousRow >= 0) {
+                        // Reverse wrap-around (DECRWRAP): jump to the right margin of the previous line.
                         setCursorRowCol(previousRow, mRightMargin - 1);
                     }
                 } else {
@@ -1221,8 +1227,8 @@ public final class TerminalEmulator {
                     mClient.onTerminalCursorStateChange(setting);
                 break;
             case 40: // Allow 80 => 132 Mode, ignore.
-            case 45: // TODO: Reverse wrap-around. Implement???
-            case 66: // Application keypad (DECNKM).
+            case 45: // Reverse wrap-around (DECRWRAP).
+                mReverseWrap = setting;
                 break;
             case 69: // Left and right margin mode (DECLRMM).
                 if (!setting) {
@@ -1679,9 +1685,10 @@ public final class TerminalEmulator {
                     unimplementedSequence(b);
                 }
                 break;
-            case 'X': // "${CSI}${N}X" - Erase ${N:=1} character(s) (ECH). FIXME: Clears character attributes?
+            case 'X': // "${CSI}${N}X" - Erase ${N:=1} character(s) (ECH). Erased characters are set to the
+                       // current rendition, like EL, and erasing is limited to the right margin (DECLRMM).
                 mAboutToAutoWrap = false;
-                mScreen.blockSet(mCursorCol, mCursorRow, Math.min(getArg0(1), mColumns - mCursorCol), 1, ' ', getStyle());
+                mScreen.blockSet(mCursorCol, mCursorRow, Math.min(getArg0(1), mRightMargin - mCursorCol), 1, ' ', getStyle());
                 break;
             case 'Z': // Cursor Backward Tabulation (CBT). Move the active position n tabs backward.
                 int numberOfTabs = getArg0(1);
