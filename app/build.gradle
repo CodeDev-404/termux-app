@@ -166,6 +166,36 @@ def validateVersionName(String versionName) {
         throw new GradleException("The versionName '"  + versionName + "' is not a valid version as per semantic version '2.0.0' spec in the format 'major.minor.patch(-prerelease)(+buildmetadata)'. https://semver.org/spec/v2.0.0.html.")
 }
 
+// Resolve the latest DroidShell bootstrap release tag from the fork's
+// GitHub releases. Tags look like "bootstrap-YYYY.MM.DD-rN+apt.android-7".
+// Overridable via TERMUX_BOOTSTRAP_VERSION (exact tag) or
+// TERMUX_BOOTSTRAP_BASE_URL (release base URL).
+def getBootstrapVersion() {
+    def override = System.getenv("TERMUX_BOOTSTRAP_VERSION")
+    if (override) return override
+
+    def repo = System.getenv("TERMUX_BOOTSTRAP_REPO") ?: "CodeDev-404/termux-packages"
+    def apiUrl = "https://api.github.com/repos/" + repo + "/releases?per_page=30"
+    try {
+        def connection = new URL(apiUrl).openConnection()
+        connection.setInstanceFollowRedirects(true)
+        connection.setRequestProperty("User-Agent", "DroidShell-gradle")
+        def json = new groovy.json.JsonSlurper().parse(connection.inputStream)
+        def versions = json.findAll { release ->
+            release.tag_name != null && release.tag_name.startsWith("bootstrap-") &&
+                release.tag_name.endsWith("+apt.android-7") && release.draft == false
+        }.collect { it.tag_name }
+        if (!versions.isEmpty()) {
+            logger.quiet("Resolved DroidShell bootstrap version: " + versions[0])
+            return versions[0]
+        }
+    } catch (Exception e) {
+        logger.quiet("Failed to resolve bootstrap version from GitHub API: " + e.message)
+    }
+    throw new GradleException("Could not resolve a DroidShell bootstrap release from " + apiUrl +
+        ". Publish one first (workflow 'Generate DroidShell bootstrap archives') or set TERMUX_BOOTSTRAP_VERSION.")
+}
+
 def downloadBootstrap(String arch, String expectedChecksum, String version) {
     def digest = java.security.MessageDigest.getInstance("SHA-256")
 
@@ -192,9 +222,10 @@ def downloadBootstrap(String arch, String expectedChecksum, String version) {
     // Bootstrap downloads come from the fork's releases. With a custom
     // package name/prefix the official Termux bootstrap cannot be used,
     // so the bootstrap must be rebuilt from termux-packages and published
-    // under this URL (Phase 2). Overridable via TERMUX_BOOTSTRAP_BASE_URL.
+    // under this URL (Phase 2).
     def bootstrapBaseUrl = System.getenv("TERMUX_BOOTSTRAP_BASE_URL") ?: "https://github.com/CodeDev-404/termux-packages/releases/download"
-    def remoteUrl = bootstrapBaseUrl + "/bootstrap-" + version + "/bootstrap-" + arch + ".zip"
+    def resolvedVersion = getBootstrapVersion()
+    def remoteUrl = bootstrapBaseUrl + "/" + resolvedVersion + "/bootstrap-" + arch + ".zip"
     logger.quiet("Downloading " + remoteUrl + " ...")
 
     file.parentFile.mkdirs()
@@ -208,9 +239,13 @@ def downloadBootstrap(String arch, String expectedChecksum, String version) {
 
     def checksum = new BigInteger(1, digest.digest()).toString(16)
     while (checksum.length() < 64) { checksum = "0" + checksum }
-    if (checksum != expectedChecksum) {
+    def skipChecksum = expectedChecksum == "unknown" || System.getenv("TERMUX_BOOTSTRAP_SKIP_CHECKSUM") == "true"
+    if (!skipChecksum && checksum != expectedChecksum) {
         file.delete()
         throw new GradleException("Wrong checksum for " + remoteUrl + ": expected: " + expectedChecksum + ", actual: " + checksum)
+    }
+    if (skipChecksum) {
+        logger.quiet("Skipping checksum verification for " + remoteUrl + " (actual: " + checksum + ")")
     }
 }
 
@@ -226,11 +261,17 @@ task downloadBootstraps() {
     doLast {
         def packageVariant = project.ext.packageVariant
         if (packageVariant == "apt-android-7") {
-            def version = "2026.02.12-r1" + "%2B" + "apt.android-7"
-            downloadBootstrap("aarch64", "ea2aeba8819e517db711f8c32369e89e7c52cee73e07930ff91185e1ab93f4f3", version)
-            downloadBootstrap("arm", "a38f4d3b2f735f83be2bf54eff463e86dc32a3e2f9f861c1557c4378d249c018", version)
-            downloadBootstrap("i686", "f5bc0b025b9f3b420b5fcaeefc064f888f5f22a0d6fd7090f4aac0c33eb3555b", version)
-            downloadBootstrap("x86_64", "b7fd0f2e3a4de534be3144f9f91acc768630fc463eaf134ab2e64c545e834f7a", version)
+            // For DroidShell the version resolves to the latest bootstrap
+            // release published on the fork (see getBootstrapVersion()).
+            // Checksums are unknown until the first fork release is
+            // published; verification can be enabled with
+            // TERMUX_BOOTSTRAP_SKIP_CHECKSUM=false once the values are
+            // known and hardcoded here.
+            def version = getBootstrapVersion()
+            downloadBootstrap("aarch64", "unknown", version)
+            downloadBootstrap("arm", "unknown", version)
+            downloadBootstrap("i686", "unknown", version)
+            downloadBootstrap("x86_64", "unknown", version)
         } else if (packageVariant == "apt-android-5") {
             def version = "2022.04.28-r6" + "+" + packageVariant
             downloadBootstrap("aarch64", "913609d439415c828c5640be1b0561467e539cb1c7080662decaaca2fb4820e7", version)
