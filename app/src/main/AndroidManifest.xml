@@ -38,7 +38,7 @@
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 
     <application
-        android:name=".app.TermuxApplication"
+        android:name="com.termuxapp.TermuxApplication"
         android:allowBackup="false"
         android:banner="@drawable/banner"
         android:icon="@mipmap/ic_launcher"
@@ -50,7 +50,7 @@
         tools:targetApi="m">
 
         <activity
-            android:name=".app.TermuxActivity"
+            android:name="com.termuxapp.TermuxActivity"
             android:exported="true"
             android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|keyboard|keyboardHidden|navigation"
             android:label="@string/application_name"
@@ -75,9 +75,9 @@
         </activity>
 
         <activity-alias
-            android:name=".HomeActivity"
+            android:name="com.termuxHomeActivity"
             android:exported="true"
-            android:targetActivity=".app.TermuxActivity">
+            android:targetActivity="com.termux.app.TermuxActivity">
 
             <!-- Launch activity automatically on boot on Android Things devices -->
             <intent-filter>
@@ -89,7 +89,7 @@
         </activity-alias>
 
         <activity
-            android:name=".app.activities.HelpActivity"
+            android:name="com.termuxapp.activities.HelpActivity"
             android:exported="false"
             android:label="@string/application_name"
             android:parentActivityName=".app.TermuxActivity"
@@ -97,18 +97,18 @@
             tools:targetApi="n" />
 
         <activity
-            android:name=".app.activities.SettingsActivity"
+            android:name="com.termuxapp.activities.SettingsActivity"
             android:exported="true"
             android:label="@string/title_activity_termux_settings"
             android:theme="@style/Theme.TermuxApp.DayNight.NoActionBar" />
 
         <activity
-            android:name=".shared.activities.ReportActivity"
+            android:name="com.termuxshared.activities.ReportActivity"
             android:theme="@style/Theme.MarkdownViewActivity.DayNight"
             android:documentLaunchMode="intoExisting" />
 
         <activity
-            android:name=".app.api.file.FileReceiverActivity"
+            android:name="com.termuxapp.api.file.FileReceiverActivity"
             android:excludeFromRecents="true"
             android:exported="false"
             android:noHistory="true"
@@ -118,9 +118,9 @@
         </activity>
 
         <activity-alias
-            android:name=".app.api.file.FileShareReceiverActivity"
+            android:name="com.termuxapp.api.file.FileShareReceiverActivity"
             android:exported="true"
-            android:targetActivity=".app.api.file.FileReceiverActivity">
+            android:targetActivity="com.termux.app.api.file.FileReceiverActivity">
 
             <!-- Accept multiple file types when sending. -->
             <intent-filter>
@@ -139,9 +139,9 @@
         </activity-alias>
 
         <activity-alias
-            android:name=".app.api.file.FileViewReceiverActivity"
+            android:name="com.termuxapp.api.file.FileViewReceiverActivity"
             android:exported="true"
-            android:targetActivity=".app.api.file.FileReceiverActivity">
+            android:targetActivity="com.termux.app.api.file.FileReceiverActivity">
 
             <!-- Accept multiple file types to let Termux be usable as generic file viewer. -->
             <intent-filter tools:ignore="AppLinkUrlError">
@@ -158,7 +158,7 @@
         </activity-alias>
 
         <provider
-            android:name=".filepicker.TermuxDocumentsProvider"
+            android:name="com.termuxfilepicker.TermuxDocumentsProvider"
             android:authorities="${TERMUX_PACKAGE_NAME}.documents"
             android:exported="true"
             android:grantUriPermissions="true"
@@ -177,11 +177,11 @@
 
 
         <receiver
-            android:name=".app.TermuxOpenReceiver"
+            android:name="com.termuxapp.TermuxOpenReceiver"
             android:exported="false" />
 
         <receiver
-            android:name=".app.event.SystemEventReceiver"
+            android:name="com.termuxapp.event.SystemEventReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -194,11 +194,11 @@
 
 
         <service
-            android:name=".app.TermuxService"
+            android:name="com.termuxapp.TermuxService"
             android:exported="false" />
 
         <service
-            android:name=".app.RunCommandService"
+            android:name="com.termuxapp.RunCommandService"
             android:exported="true"
             android:permission="${TERMUX_PACKAGE_NAME}.permission.RUN_COMMAND">
             <intent-filter>
