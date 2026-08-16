@@ -169,7 +169,7 @@
         </provider>
 
         <provider
-            android:name=".app.TermuxOpenReceiver$ContentProvider"
+            android:name="com.termux.app.TermuxOpenReceiver$ContentProvider"
             android:authorities="${TERMUX_PACKAGE_NAME}.files"
             android:exported="true"
             android:grantUriPermissions="true"
@@ -189,7 +189,7 @@
         </receiver>
 
         <receiver
-            android:name=".shared.activities.ReportActivity$ReportActivityBroadcastReceiver"
+            android:name="com.termux.shared.activities.ReportActivity$ReportActivityBroadcastReceiver"
             android:exported="false" />
 
 
