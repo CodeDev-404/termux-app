@@ -69,23 +69,24 @@ proporciona. Agregar el directorio a `PATH` no resuelve esa incompatibilidad.
 
 ### Camino Recomendado
 
-Ejecutar OpenCode dentro de Debian o Ubuntu mediante `proot-distro`. El
-repositorio DroidShell debe incluir primero `proot` y `proot-distro`; esa
-integración está planificada y todavía no forma parte del repositorio apt
-actual.
-
-Cuando estén publicados, el flujo será:
+El repositorio DroidShell ya incluye `proot`, `proot-distro`, Python y sus
+dependencias. El flujo probado es ejecutar OpenCode dentro de Debian:
 
 ```bash
 pkg install proot-distro
 proot-distro install debian
 proot-distro login debian
+export DEBIAN_FRONTEND=noninteractive
 apt update
-apt install curl ca-certificates
+apt install -y curl ca-certificates
 curl -fsSL https://opencode.ai/install | bash
 export PATH="$HOME/.opencode/bin:$PATH"
 opencode --version
 ```
+
+OpenCode se ejecuta con el cargador glibc de Debian, no directamente sobre
+Android. En la prueba realizada dentro de DroidShell respondió correctamente
+con la versión `1.18.18`.
 
 Después se puede iniciar dentro de cualquier proyecto:
 
