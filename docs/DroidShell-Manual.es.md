@@ -48,12 +48,42 @@ El repositorio propio contiene actualmente Node.js, npm, c-ares y sus
 dependencias principales. Se irá ampliando con más paquetes compilados para
 el prefijo DroidShell.
 
-## Instalar OpenCode
+## OpenCode En Android
 
-OpenCode se instala usando npm:
+La versión actual de `opencode-ai` no declara compatibilidad con Android:
+
+```text
+Valid os: darwin, linux, win32
+Actual os: android
+```
+
+Por eso este comando falla directamente en DroidShell:
 
 ```bash
 npm install -g opencode-ai
+```
+
+El instalador oficial puede descargar un binario Linux arm64, pero ese binario
+requiere el cargador glibc `/lib/ld-linux-aarch64.so.1`, que Android no
+proporciona. Agregar el directorio a `PATH` no resuelve esa incompatibilidad.
+
+### Camino Recomendado
+
+Ejecutar OpenCode dentro de Debian o Ubuntu mediante `proot-distro`. El
+repositorio DroidShell debe incluir primero `proot` y `proot-distro`; esa
+integración está planificada y todavía no forma parte del repositorio apt
+actual.
+
+Cuando estén publicados, el flujo será:
+
+```bash
+pkg install proot-distro
+proot-distro install debian
+proot-distro login debian
+apt update
+apt install curl ca-certificates
+curl -fsSL https://opencode.ai/install | bash
+export PATH="$HOME/.opencode/bin:$PATH"
 opencode --version
 ```
 
@@ -64,10 +94,10 @@ cd ~/mi-proyecto
 opencode
 ```
 
-Para configurar el proveedor de inteligencia artificial, usar el comando
-`/connect` dentro de OpenCode.
+Para configurar el proveedor de inteligencia artificial, usar `/connect`
+dentro de OpenCode.
 
-Documentación oficial de OpenCode: <https://opencode.ai/docs/>
+Documentación oficial: <https://opencode.ai/docs/>
 
 ## Mejoras Incluidas
 
