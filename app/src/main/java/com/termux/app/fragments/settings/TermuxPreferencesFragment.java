@@ -6,9 +6,11 @@ import android.os.Bundle;
 import androidx.annotation.Keep;
 import androidx.preference.PreferenceDataStore;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.ListPreference;
 import androidx.preference.PreferenceManager;
 
 import com.droidshell.app.R;
+import com.termux.app.ui.DroidShellStyleManager;
 import com.termux.shared.termux.settings.preferences.TermuxAppSharedPreferences;
 
 @Keep
@@ -23,6 +25,15 @@ public class TermuxPreferencesFragment extends PreferenceFragmentCompat {
         preferenceManager.setPreferenceDataStore(TermuxPreferencesDataStore.getInstance(context));
 
         setPreferencesFromResource(R.xml.termux_preferences, rootKey);
+
+        ListPreference stylePreference = findPreference(DroidShellStyleManager.STYLE_KEY);
+        if (stylePreference != null) {
+            stylePreference.setValue(DroidShellStyleManager.getStyle(context));
+            stylePreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                DroidShellStyleManager.setStyle(context, String.valueOf(newValue));
+                return true;
+            });
+        }
     }
 
 }

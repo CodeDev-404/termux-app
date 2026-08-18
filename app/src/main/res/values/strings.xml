@@ -12,6 +12,8 @@
     ]>
 
 <resources>
+    <string name="droidshell_ui_style_title">Visual style</string>
+    <string name="droidshell_ui_style_summary">Change the DroidShell interface style</string>
 
     <string name="application_name">&TERMUX_APP_NAME;</string>
     <string name="shared_user_label">&TERMUX_APP_NAME; user</string>

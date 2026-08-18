@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="droidshell_ui_style_entries">
+        <item>Obsidian Console</item>
+        <item>Material You</item>
+        <item>Cyberpunk</item>
+        <item>Minimal Pro</item>
+        <item>AMOLED</item>
+    </string-array>
+
+    <string-array name="droidshell_ui_style_values">
+        <item>obsidian</item>
+        <item>material</item>
+        <item>cyberpunk</item>
+        <item>minimal</item>
+        <item>amoled</item>
+    </string-array>
+</resources>
