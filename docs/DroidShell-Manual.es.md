@@ -88,11 +88,36 @@ OpenCode se ejecuta con el cargador glibc de Debian, no directamente sobre
 Android. En la prueba realizada dentro de DroidShell respondió correctamente
 con la versión `1.18.18`.
 
-Después se puede iniciar dentro de cualquier proyecto:
+### Abrir OpenCode
+
+Cada vez que se quiera usar OpenCode:
 
 ```bash
+proot-distro login debian
+export PATH="$HOME/.opencode/bin:$PATH"
+opencode --version
+```
+
+Después se puede iniciar dentro de un proyecto de Debian:
+
+```bash
+cd /root/mi-proyecto
+opencode
+```
+
+Para compartir el home de DroidShell con Debian:
+
+```bash
+exit
+proot-distro login debian --shared-home
 cd ~/mi-proyecto
 opencode
+```
+
+Si OpenCode no aparece, agregar primero su directorio al `PATH`:
+
+```bash
+export PATH="$HOME/.opencode/bin:$PATH"
 ```
 
 Para configurar el proveedor de inteligencia artificial, usar `/connect`
