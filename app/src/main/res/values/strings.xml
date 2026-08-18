@@ -16,6 +16,10 @@
     <string name="droidshell_ui_style_summary">Change the DroidShell interface style</string>
     <string name="droidshell_drawer_title">DroidShell</string>
     <string name="droidshell_drawer_subtitle">Terminal workspace</string>
+    <string name="bootstrap_progress_title">Preparing DroidShell</string>
+    <string name="bootstrap_progress_preparing">Preparing the private terminal environment…</string>
+    <string name="bootstrap_progress_extracting">Installing the terminal packages…</string>
+    <string name="bootstrap_progress_finishing">Finishing setup…</string>
 
     <string name="application_name">&TERMUX_APP_NAME;</string>
     <string name="shared_user_label">&TERMUX_APP_NAME; user</string>
