@@ -39,6 +39,8 @@ public final class DroidShellStyleManager {
         if (toolbar != null) toolbar.setBackgroundColor(style.surface);
 
         applyTextColor(activity.findViewById(R.id.settings_button), style.text);
+        applyTextColor(activity.findViewById(R.id.drawer_title), style.text);
+        applyTextColor(activity.findViewById(R.id.drawer_subtitle), style.mutedText);
         applyTextColor(activity.findViewById(R.id.toggle_keyboard_button), style.text);
         applyTextColor(activity.findViewById(R.id.new_session_button), style.accent);
     }
@@ -59,6 +61,7 @@ public final class DroidShellStyleManager {
         final int surface;
         final int accent;
         final int text;
+        final int mutedText;
 
         Style(String name, String background, String surface, String accent, String text) {
             this.name = name;
@@ -66,6 +69,7 @@ public final class DroidShellStyleManager {
             this.surface = Color.parseColor(surface);
             this.accent = Color.parseColor(accent);
             this.text = Color.parseColor(text);
+            this.mutedText = Color.argb(180, Color.red(this.text), Color.green(this.text), Color.blue(this.text));
         }
 
         static Style fromName(String name) {
