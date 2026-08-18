@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.widget.PopupMenu;
 
 import com.droidshell.app.R;
 import com.termux.app.api.file.FileReceiverActivity;
@@ -252,6 +253,8 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         setNewSessionButtonView();
 
         setToggleKeyboardView();
+
+        setFloatingActionViews();
 
         registerForContextMenu(mTerminalView);
 
@@ -596,6 +599,36 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         findViewById(R.id.toggle_keyboard_button).setOnLongClickListener(v -> {
             toggleTerminalToolbar();
             return true;
+        });
+    }
+
+    private void setFloatingActionViews() {
+        findViewById(R.id.open_drawer_button).setOnClickListener(v -> getDrawer().openDrawer(Gravity.LEFT));
+
+        View quickActionsButton = findViewById(R.id.quick_actions_button);
+        quickActionsButton.setOnClickListener(view -> {
+            PopupMenu popup = new PopupMenu(this, view);
+            popup.getMenu().add(R.string.droidshell_action_new_session);
+            popup.getMenu().add(R.string.droidshell_action_keyboard);
+            popup.getMenu().add(R.string.droidshell_action_toolbar);
+            popup.getMenu().add(R.string.droidshell_action_read_only);
+            popup.getMenu().add(R.string.droidshell_action_menu);
+            popup.setOnMenuItemClickListener(item -> {
+                String title = item.getTitle().toString();
+                if (title.equals(getString(R.string.droidshell_action_new_session))) {
+                    mTermuxTerminalSessionActivityClient.addNewSession(false, null);
+                } else if (title.equals(getString(R.string.droidshell_action_keyboard))) {
+                    mTermuxTerminalViewClient.onToggleSoftKeyboardRequest();
+                } else if (title.equals(getString(R.string.droidshell_action_toolbar))) {
+                    toggleTerminalToolbar();
+                } else if (title.equals(getString(R.string.droidshell_action_read_only))) {
+                    toggleReadOnly();
+                } else if (title.equals(getString(R.string.droidshell_action_menu))) {
+                    mTerminalView.showContextMenu();
+                }
+                return true;
+            });
+            popup.show();
         });
     }
 

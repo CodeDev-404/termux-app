@@ -3,8 +3,11 @@ package com.termux.app.ui;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.content.res.ColorStateList;
 import android.view.View;
 import android.widget.TextView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.droidshell.app.R;
 
@@ -43,6 +46,8 @@ public final class DroidShellStyleManager {
         applyTextColor(activity.findViewById(R.id.drawer_subtitle), style.mutedText);
         applyTextColor(activity.findViewById(R.id.toggle_keyboard_button), style.text);
         applyTextColor(activity.findViewById(R.id.new_session_button), style.accent);
+        applyFloatingButton(activity.findViewById(R.id.open_drawer_button), style.surface, style.text);
+        applyFloatingButton(activity.findViewById(R.id.quick_actions_button), style.accent, style.background);
     }
 
     /** Applies the same visual language to the settings screen chrome. */
@@ -56,6 +61,13 @@ public final class DroidShellStyleManager {
 
     private static void applyTextColor(View view, int color) {
         if (view instanceof TextView) ((TextView) view).setTextColor(color);
+    }
+
+    private static void applyFloatingButton(View view, int background, int icon) {
+        if (!(view instanceof FloatingActionButton)) return;
+        FloatingActionButton button = (FloatingActionButton) view;
+        button.setBackgroundTintList(ColorStateList.valueOf(background));
+        button.setImageTintList(ColorStateList.valueOf(icon));
     }
 
     private enum Style {
