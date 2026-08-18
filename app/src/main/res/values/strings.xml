@@ -18,6 +18,8 @@
     <string name="droidshell_drawer_subtitle">Terminal workspace</string>
     <string name="droidshell_open_drawer">Open session panel</string>
     <string name="droidshell_quick_actions">Quick terminal actions</string>
+    <string name="droidshell_quick_actions_title">Quick actions</string>
+    <string name="droidshell_quick_actions_summary">Choose the actions shown in the floating menu</string>
     <string name="droidshell_action_new_session">New session</string>
     <string name="droidshell_action_keyboard">Toggle keyboard</string>
     <string name="droidshell_action_toolbar">Toggle extra keys</string>

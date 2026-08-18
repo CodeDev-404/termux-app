@@ -7,6 +7,7 @@ import androidx.annotation.Keep;
 import androidx.preference.PreferenceDataStore;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.ListPreference;
+import androidx.preference.MultiSelectListPreference;
 import androidx.preference.PreferenceManager;
 
 import com.droidshell.app.R;
@@ -31,6 +32,17 @@ public class TermuxPreferencesFragment extends PreferenceFragmentCompat {
             stylePreference.setValue(DroidShellStyleManager.getStyle(context));
             stylePreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 DroidShellStyleManager.setStyle(context, String.valueOf(newValue));
+                return true;
+            });
+        }
+
+        MultiSelectListPreference quickActionsPreference = findPreference(DroidShellStyleManager.QUICK_ACTIONS_KEY);
+        if (quickActionsPreference != null) {
+            quickActionsPreference.setValues(DroidShellStyleManager.getQuickActions(context));
+            quickActionsPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                @SuppressWarnings("unchecked")
+                java.util.Set<String> actions = (java.util.Set<String>) newValue;
+                DroidShellStyleManager.setQuickActions(context, actions);
                 return true;
             });
         }

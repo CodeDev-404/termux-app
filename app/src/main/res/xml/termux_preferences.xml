@@ -9,6 +9,14 @@
         app:defaultValue="obsidian"
         app:persistent="false" />
 
+    <MultiSelectListPreference
+        app:key="droidshell_quick_actions"
+        app:title="@string/droidshell_quick_actions_title"
+        app:summary="@string/droidshell_quick_actions_summary"
+        app:entries="@array/droidshell_quick_action_entries"
+        app:entryValues="@array/droidshell_quick_action_values"
+        app:persistent="false" />
+
     <Preference
         app:title="@string/termux_debugging_preferences_title"
         app:summary="@string/termux_debugging_preferences_summary"

@@ -15,4 +15,20 @@
         <item>minimal</item>
         <item>amoled</item>
     </string-array>
+
+    <string-array name="droidshell_quick_action_entries">
+        <item>New session</item>
+        <item>Toggle keyboard</item>
+        <item>Toggle extra keys</item>
+        <item>Toggle read-only</item>
+        <item>Terminal menu</item>
+    </string-array>
+
+    <string-array name="droidshell_quick_action_values">
+        <item>new_session</item>
+        <item>keyboard</item>
+        <item>toolbar</item>
+        <item>read_only</item>
+        <item>menu</item>
+    </string-array>
 </resources>

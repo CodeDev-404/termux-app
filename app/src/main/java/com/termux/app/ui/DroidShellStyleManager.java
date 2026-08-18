@@ -11,11 +11,16 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import com.droidshell.app.R;
 
+import java.util.Arrays;
+import java.util.LinkedHashSet;
+import java.util.Set;
+
 /** Applies the selected DroidShell chrome style without changing terminal rendering. */
 public final class DroidShellStyleManager {
 
     public static final String PREFERENCES_FILE = "droidshell_ui_preferences";
     public static final String STYLE_KEY = "droidshell_ui_style";
+    public static final String QUICK_ACTIONS_KEY = "droidshell_quick_actions";
     public static final String DEFAULT_STYLE = "obsidian";
 
     private DroidShellStyleManager() {
@@ -29,6 +34,18 @@ public final class DroidShellStyleManager {
     public static void setStyle(Context context, String style) {
         context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
             .edit().putString(STYLE_KEY, style).apply();
+    }
+
+    public static Set<String> getQuickActions(Context context) {
+        Set<String> defaults = new LinkedHashSet<>(Arrays.asList(
+            "new_session", "keyboard", "toolbar", "read_only", "menu"));
+        return context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
+            .getStringSet(QUICK_ACTIONS_KEY, defaults);
+    }
+
+    public static void setQuickActions(Context context, Set<String> actions) {
+        context.getSharedPreferences(PREFERENCES_FILE, Context.MODE_PRIVATE)
+            .edit().putStringSet(QUICK_ACTIONS_KEY, new LinkedHashSet<>(actions)).apply();
     }
 
     public static void apply(Activity activity) {

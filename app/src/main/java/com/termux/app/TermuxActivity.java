@@ -608,11 +608,12 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         View quickActionsButton = findViewById(R.id.quick_actions_button);
         quickActionsButton.setOnClickListener(view -> {
             PopupMenu popup = new PopupMenu(this, view);
-            popup.getMenu().add(R.string.droidshell_action_new_session);
-            popup.getMenu().add(R.string.droidshell_action_keyboard);
-            popup.getMenu().add(R.string.droidshell_action_toolbar);
-            popup.getMenu().add(R.string.droidshell_action_read_only);
-            popup.getMenu().add(R.string.droidshell_action_menu);
+            java.util.Set<String> actions = DroidShellStyleManager.getQuickActions(this);
+            if (actions.contains("new_session")) popup.getMenu().add(R.string.droidshell_action_new_session);
+            if (actions.contains("keyboard")) popup.getMenu().add(R.string.droidshell_action_keyboard);
+            if (actions.contains("toolbar")) popup.getMenu().add(R.string.droidshell_action_toolbar);
+            if (actions.contains("read_only")) popup.getMenu().add(R.string.droidshell_action_read_only);
+            if (actions.contains("menu")) popup.getMenu().add(R.string.droidshell_action_menu);
             popup.setOnMenuItemClickListener(item -> {
                 String title = item.getTitle().toString();
                 if (title.equals(getString(R.string.droidshell_action_new_session))) {
