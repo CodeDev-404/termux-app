@@ -45,6 +45,15 @@ public final class DroidShellStyleManager {
         applyTextColor(activity.findViewById(R.id.new_session_button), style.accent);
     }
 
+    /** Applies the same visual language to the settings screen chrome. */
+    public static void applySettings(Activity activity) {
+        Style style = Style.fromName(getStyle(activity));
+        View content = activity.findViewById(android.R.id.content);
+        View toolbar = activity.findViewById(com.termux.shared.R.id.toolbar);
+        if (content != null) content.setBackgroundColor(style.background);
+        if (toolbar != null) toolbar.setBackgroundColor(style.surface);
+    }
+
     private static void applyTextColor(View view, int color) {
         if (view instanceof TextView) ((TextView) view).setTextColor(color);
     }
