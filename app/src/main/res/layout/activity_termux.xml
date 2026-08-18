@@ -129,7 +129,9 @@
             android:id="@+id/terminal_toolbar_view_pager"
             android:visibility="gone"
             android:layout_width="match_parent"
-            android:layout_height="37.5dp"
+            android:layout_height="44dp"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
             android:background="@color/black"
             android:layout_alignParentBottom="true" />
 

@@ -8,9 +8,12 @@
     android:maxLines="1"
     android:inputType="text"
     android:importantForAutofill="no"
+    android:background="@drawable/terminal_toolbar_input_background"
     android:textColor="@android:color/white"
     android:textColorHighlight="@android:color/darker_gray"
+    android:paddingStart="12dp"
     android:paddingTop="0dp"
     android:textCursorDrawable="@null"
+    android:paddingEnd="12dp"
     android:paddingBottom="0dp"
     tools:ignore="LabelFor" />
