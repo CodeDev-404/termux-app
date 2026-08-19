@@ -46,4 +46,13 @@
         <item name="extraKeysButtonActiveBackgroundColor">@color/grey_500</item>
     </style>
 
+    <!-- DroidShell quick actions popup overlay. -->
+    <style name="Theme.DroidShell.QuickActionsPopup" parent="ThemeOverlay.MaterialComponents.Dark">
+        <item name="android:windowBackground">@color/droidshell_popup_background</item>
+        <item name="android:itemBackground">@drawable/droidshell_popup_item_background</item>
+        <item name="android:textColorPrimary">@color/droidshell_popup_text</item>
+        <item name="android:textColorSecondary">@color/droidshell_popup_text</item>
+        <item name="colorOnSurface">@color/droidshell_popup_text</item>
+    </style>
+
 </resources>

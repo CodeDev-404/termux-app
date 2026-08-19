@@ -6,6 +6,7 @@ import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.ContextThemeWrapper;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -607,7 +608,8 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
 
         View quickActionsButton = findViewById(R.id.quick_actions_button);
         quickActionsButton.setOnClickListener(view -> {
-            PopupMenu popup = new PopupMenu(this, view);
+            Context themedContext = new ContextThemeWrapper(this, R.style.Theme_DroidShell_QuickActionsPopup);
+            PopupMenu popup = new PopupMenu(themedContext, view);
             java.util.Set<String> actions = DroidShellStyleManager.getQuickActions(this);
             if (actions.contains("new_session")) popup.getMenu().add(R.string.droidshell_action_new_session);
             if (actions.contains("keyboard")) popup.getMenu().add(R.string.droidshell_action_keyboard);
