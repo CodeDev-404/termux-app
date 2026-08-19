@@ -25,6 +25,7 @@ import com.termux.shared.termux.TermuxConstants;
 import com.termux.shared.termux.TermuxUtils;
 import com.termux.shared.activity.media.AppCompatActivityUtils;
 import com.termux.shared.theme.NightMode;
+import com.termux.app.ui.DroidShellStyleManager;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -44,6 +45,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         AppCompatActivityUtils.setToolbar(this, com.termux.shared.R.id.toolbar);
         AppCompatActivityUtils.setShowBackButtonInActionBar(this, true);
+        DroidShellStyleManager.applySettings(this);
     }
 
     @Override

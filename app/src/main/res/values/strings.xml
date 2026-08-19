@@ -12,6 +12,27 @@
     ]>
 
 <resources>
+    <string name="droidshell_ui_style_title">Visual style</string>
+    <string name="droidshell_ui_style_summary">Change the DroidShell interface style</string>
+    <string name="droidshell_drawer_title">DroidShell</string>
+    <string name="droidshell_drawer_subtitle">Terminal workspace</string>
+    <string name="droidshell_drawer_logo_letter">D</string>
+    <string name="droidshell_drawer_sessions_label">Sessions</string>
+    <string name="droidshell_session_active">active</string>
+    <string name="droidshell_session_finished">finished</string>
+    <string name="droidshell_open_drawer">Open session panel</string>
+    <string name="droidshell_quick_actions">Quick terminal actions</string>
+    <string name="droidshell_quick_actions_title">Quick actions</string>
+    <string name="droidshell_quick_actions_summary">Choose the actions shown in the floating menu</string>
+    <string name="droidshell_action_new_session">New session</string>
+    <string name="droidshell_action_keyboard">Toggle keyboard</string>
+    <string name="droidshell_action_toolbar">Toggle extra keys</string>
+    <string name="droidshell_action_read_only">Toggle read-only mode</string>
+    <string name="droidshell_action_menu">Open terminal menu</string>
+    <string name="bootstrap_progress_title">Preparing DroidShell</string>
+    <string name="bootstrap_progress_preparing">Preparing the private terminal environment…</string>
+    <string name="bootstrap_progress_extracting">Installing the terminal packages…</string>
+    <string name="bootstrap_progress_finishing">Finishing setup…</string>
 
     <string name="application_name">&TERMUX_APP_NAME;</string>
     <string name="shared_user_label">&TERMUX_APP_NAME; user</string>

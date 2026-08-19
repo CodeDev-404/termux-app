@@ -5,4 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true"
-    android:orientation="horizontal" />
+    android:orientation="horizontal"
+    android:paddingStart="4dp"
+    android:paddingTop="3dp"
+    android:paddingEnd="4dp"
+    android:paddingBottom="3dp"
+    android:clipToPadding="false" />

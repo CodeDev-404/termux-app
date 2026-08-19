@@ -2,13 +2,14 @@ package com.termux.app;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.Build;
 import android.os.Environment;
 import android.system.Os;
 import android.util.Pair;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.droidshell.app.R;
 import com.termux.shared.file.FileUtils;
@@ -114,16 +115,22 @@ final class TermuxInstaller {
             Logger.logInfo(LOG_TAG, "The termux prefix directory \"" + TERMUX_PREFIX_DIR_PATH + "\" does not exist but another file exists at its destination.");
         }
 
-        final ProgressDialog progress = ProgressDialog.show(activity, null, activity.getString(R.string.bootstrap_installer_body), true, false);
+        final Dialog progress = new Dialog(activity);
+        progress.setContentView(R.layout.dialog_bootstrap_install);
+        progress.setCancelable(false);
+        progress.show();
+        final TextView progressMessage = progress.findViewById(R.id.bootstrap_progress_message);
         new Thread() {
             @Override
             public void run() {
                 try {
                     Logger.logInfo(LOG_TAG, "Installing " + TermuxConstants.TERMUX_APP_NAME + " bootstrap packages.");
+                    updateBootstrapProgress(activity, progressMessage, R.string.bootstrap_progress_preparing);
 
                     Error error;
 
                     // Delete prefix staging directory or any file at its destination
+                    updateBootstrapProgress(activity, progressMessage, R.string.bootstrap_progress_extracting);
                     error = FileUtils.deleteFile("termux prefix staging directory", TERMUX_STAGING_PREFIX_DIR_PATH, true);
                     if (error != null) {
                         showBootstrapErrorDialog(activity, whenDone, Error.getErrorMarkdownString(error));
@@ -211,6 +218,7 @@ final class TermuxInstaller {
                     }
 
                     Logger.logInfo(LOG_TAG, "Moving termux prefix staging to prefix directory.");
+                    updateBootstrapProgress(activity, progressMessage, R.string.bootstrap_progress_finishing);
 
                     if (!TERMUX_STAGING_PREFIX_DIR.renameTo(TERMUX_PREFIX_DIR)) {
                         throw new RuntimeException("Moving termux prefix staging to prefix directory failed");
@@ -261,6 +269,10 @@ final class TermuxInstaller {
                 // Activity already dismissed - ignore.
             }
         });
+    }
+
+    private static void updateBootstrapProgress(Activity activity, TextView messageView, int messageId) {
+        activity.runOnUiThread(() -> messageView.setText(messageId));
     }
 
     private static void sendBootstrapCrashReportNotification(Activity activity, String message) {

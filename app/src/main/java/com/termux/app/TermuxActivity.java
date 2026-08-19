@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.ContextThemeWrapper;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +26,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import android.widget.PopupMenu;
 
 import com.droidshell.app.R;
 import com.termux.app.api.file.FileReceiverActivity;
@@ -41,6 +43,7 @@ import com.termux.shared.termux.TermuxConstants;
 import com.termux.shared.termux.TermuxConstants.TERMUX_APP.TERMUX_ACTIVITY;
 import com.termux.app.activities.HelpActivity;
 import com.termux.app.activities.SettingsActivity;
+import com.termux.app.ui.DroidShellStyleManager;
 import com.termux.shared.termux.crash.TermuxCrashUtils;
 import com.termux.shared.termux.settings.preferences.TermuxAppSharedPreferences;
 import com.termux.app.terminal.TermuxSessionsListViewController;
@@ -252,6 +255,8 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
 
         setToggleKeyboardView();
 
+        setFloatingActionViews();
+
         registerForContextMenu(mTerminalView);
 
         FileReceiverActivity.updateFileReceiverActivityComponentsState(this);
@@ -287,6 +292,8 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         Logger.logDebug(LOG_TAG, "onStart");
 
         if (mIsInvalidState) return;
+
+        DroidShellStyleManager.apply(this);
 
         mIsVisible = true;
 
@@ -593,6 +600,38 @@ public final class TermuxActivity extends AppCompatActivity implements ServiceCo
         findViewById(R.id.toggle_keyboard_button).setOnLongClickListener(v -> {
             toggleTerminalToolbar();
             return true;
+        });
+    }
+
+    private void setFloatingActionViews() {
+        findViewById(R.id.open_drawer_button).setOnClickListener(v -> getDrawer().openDrawer(Gravity.LEFT));
+
+        View quickActionsButton = findViewById(R.id.quick_actions_button);
+        quickActionsButton.setOnClickListener(view -> {
+            Context themedContext = new ContextThemeWrapper(this, R.style.Theme_DroidShell_QuickActionsPopup);
+            PopupMenu popup = new PopupMenu(themedContext, view);
+            java.util.Set<String> actions = DroidShellStyleManager.getQuickActions(this);
+            if (actions.contains("new_session")) popup.getMenu().add(R.string.droidshell_action_new_session);
+            if (actions.contains("keyboard")) popup.getMenu().add(R.string.droidshell_action_keyboard);
+            if (actions.contains("toolbar")) popup.getMenu().add(R.string.droidshell_action_toolbar);
+            if (actions.contains("read_only")) popup.getMenu().add(R.string.droidshell_action_read_only);
+            if (actions.contains("menu")) popup.getMenu().add(R.string.droidshell_action_menu);
+            popup.setOnMenuItemClickListener(item -> {
+                String title = item.getTitle().toString();
+                if (title.equals(getString(R.string.droidshell_action_new_session))) {
+                    mTermuxTerminalSessionActivityClient.addNewSession(false, null);
+                } else if (title.equals(getString(R.string.droidshell_action_keyboard))) {
+                    mTermuxTerminalViewClient.onToggleSoftKeyboardRequest();
+                } else if (title.equals(getString(R.string.droidshell_action_toolbar))) {
+                    toggleTerminalToolbar();
+                } else if (title.equals(getString(R.string.droidshell_action_read_only))) {
+                    toggleReadOnly();
+                } else if (title.equals(getString(R.string.droidshell_action_menu))) {
+                    mTerminalView.showContextMenu();
+                }
+                return true;
+            });
+            popup.show();
         });
     }
 

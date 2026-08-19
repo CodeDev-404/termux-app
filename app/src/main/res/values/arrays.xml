@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="droidshell_ui_style_entries">
+        <item>Obsidian Console</item>
+        <item>Material You</item>
+        <item>Cyberpunk</item>
+        <item>Minimal Pro</item>
+        <item>AMOLED</item>
+    </string-array>
+
+    <string-array name="droidshell_ui_style_values">
+        <item>obsidian</item>
+        <item>material</item>
+        <item>cyberpunk</item>
+        <item>minimal</item>
+        <item>amoled</item>
+    </string-array>
+
+    <string-array name="droidshell_quick_action_entries">
+        <item>New session</item>
+        <item>Toggle keyboard</item>
+        <item>Toggle extra keys</item>
+        <item>Toggle read-only</item>
+        <item>Terminal menu</item>
+    </string-array>
+
+    <string-array name="droidshell_quick_action_values">
+        <item>new_session</item>
+        <item>keyboard</item>
+        <item>toolbar</item>
+        <item>read_only</item>
+        <item>menu</item>
+    </string-array>
+</resources>

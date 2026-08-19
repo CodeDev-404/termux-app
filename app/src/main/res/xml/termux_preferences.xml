@@ -1,5 +1,22 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <ListPreference
+        app:key="droidshell_ui_style"
+        app:title="@string/droidshell_ui_style_title"
+        app:summary="@string/droidshell_ui_style_summary"
+        app:entries="@array/droidshell_ui_style_entries"
+        app:entryValues="@array/droidshell_ui_style_values"
+        app:defaultValue="obsidian"
+        app:persistent="false" />
+
+    <MultiSelectListPreference
+        app:key="droidshell_quick_actions"
+        app:title="@string/droidshell_quick_actions_title"
+        app:summary="@string/droidshell_quick_actions_summary"
+        app:entries="@array/droidshell_quick_action_entries"
+        app:entryValues="@array/droidshell_quick_action_values"
+        app:persistent="false" />
+
     <Preference
         app:title="@string/termux_debugging_preferences_title"
         app:summary="@string/termux_debugging_preferences_summary"
