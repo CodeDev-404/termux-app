@@ -1,8 +1,8 @@
 package com.termux.app.terminal;
 
 import android.annotation.SuppressLint;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -42,7 +42,6 @@ public class TermuxSessionsListViewController extends BaseAdapter implements Ada
     final TermuxActivity mActivity;
 
     final StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
-    final StyleSpan italicSpan = new StyleSpan(Typeface.ITALIC);
 
     /** The live session list from {@link com.termux.app.TermuxService#getTermuxSessions()}. */
     private final List<TermuxSession> mSessionList;
@@ -166,13 +165,6 @@ public class TermuxSessionsListViewController extends BaseAdapter implements Ada
         TextView groupTitleView = groupRowView.findViewById(R.id.session_group_title);
         groupTitleView.setText(groupName);
 
-        boolean shouldEnableDarkTheme = ThemeUtils.shouldEnableDarkTheme(mActivity, NightMode.getAppNightMode().getName());
-        if (shouldEnableDarkTheme) {
-            groupTitleView.setBackground(
-                ContextCompat.getDrawable(mActivity, R.drawable.session_background_black_selected)
-            );
-        }
-
         return groupRowView;
     }
 
@@ -186,6 +178,8 @@ public class TermuxSessionsListViewController extends BaseAdapter implements Ada
         }
 
         TextView sessionTitleView = sessionRowView.findViewById(R.id.session_title);
+        TextView sessionSubtitleView = sessionRowView.findViewById(R.id.session_subtitle);
+        View sessionStatusDot = sessionRowView.findViewById(R.id.session_status_dot);
 
         TerminalSession sessionAtRow = termuxSession.getTerminalSession();
         if (sessionAtRow == null) {
@@ -193,38 +187,32 @@ public class TermuxSessionsListViewController extends BaseAdapter implements Ada
             return sessionRowView;
         }
 
-        boolean shouldEnableDarkTheme = ThemeUtils.shouldEnableDarkTheme(mActivity, NightMode.getAppNightMode().getName());
-
-        if (shouldEnableDarkTheme) {
-            sessionTitleView.setBackground(
-                ContextCompat.getDrawable(mActivity, R.drawable.session_background_black_selected)
-            );
-        }
-
         String name = sessionAtRow.mSessionName;
         String sessionTitle = sessionAtRow.getTitle();
 
         String numberPart = "[" + mSessionOrdinals.get(termuxSession) + "] ";
         String sessionNamePart = (TextUtils.isEmpty(name) ? "" : name);
-        String sessionTitlePart = (TextUtils.isEmpty(sessionTitle) ? "" : ((sessionNamePart.isEmpty() ? "" : "\n") + sessionTitle));
+        String sessionTitlePart = (TextUtils.isEmpty(sessionTitle) ? "" : ((sessionNamePart.isEmpty() ? "" : " ") + sessionTitle));
 
-        String fullSessionTitle = numberPart + sessionNamePart + sessionTitlePart;
+        String fullSessionTitle = numberPart + sessionNamePart;
         SpannableString fullSessionTitleStyled = new SpannableString(fullSessionTitle);
-        fullSessionTitleStyled.setSpan(boldSpan, 0, numberPart.length() + sessionNamePart.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        fullSessionTitleStyled.setSpan(italicSpan, numberPart.length() + sessionNamePart.length(), fullSessionTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        fullSessionTitleStyled.setSpan(boldSpan, 0, fullSessionTitle.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         sessionTitleView.setText(fullSessionTitleStyled);
+        sessionSubtitleView.setText(sessionTitlePart.trim());
 
         boolean sessionRunning = sessionAtRow.isRunning();
 
-        if (sessionRunning) {
-            sessionTitleView.setPaintFlags(sessionTitleView.getPaintFlags() & ~Paint.STRIKE_THRU_TEXT_FLAG);
-        } else {
-            sessionTitleView.setPaintFlags(sessionTitleView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
-        }
-        int defaultColor = shouldEnableDarkTheme ? Color.WHITE : Color.BLACK;
+        int defaultColor = ThemeUtils.shouldEnableDarkTheme(mActivity, NightMode.getAppNightMode().getName()) ? Color.WHITE : Color.BLACK;
         int color = sessionRunning || sessionAtRow.getExitStatus() == 0 ? defaultColor : Color.RED;
         sessionTitleView.setTextColor(color);
+
+        if (sessionStatusDot != null) {
+            int dotColor = sessionRunning
+                ? ContextCompat.getColor(mActivity, R.color.session_status_dot_running)
+                : (sessionAtRow.getExitStatus() == 0 ? Color.GRAY : Color.RED);
+            sessionStatusDot.setBackgroundTintList(ColorStateList.valueOf(dotColor));
+        }
         return sessionRowView;
     }
 

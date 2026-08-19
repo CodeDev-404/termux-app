@@ -16,6 +16,10 @@
     <string name="droidshell_ui_style_summary">Change the DroidShell interface style</string>
     <string name="droidshell_drawer_title">DroidShell</string>
     <string name="droidshell_drawer_subtitle">Terminal workspace</string>
+    <string name="droidshell_drawer_logo_letter">D</string>
+    <string name="droidshell_drawer_sessions_label">Sessions</string>
+    <string name="droidshell_session_active">active</string>
+    <string name="droidshell_session_finished">finished</string>
     <string name="droidshell_open_drawer">Open session panel</string>
     <string name="droidshell_quick_actions">Quick terminal actions</string>
     <string name="droidshell_quick_actions_title">Quick actions</string>

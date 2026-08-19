@@ -61,8 +61,14 @@ public final class DroidShellStyleManager {
         applyTextColor(activity.findViewById(R.id.settings_button), style.text);
         applyTextColor(activity.findViewById(R.id.drawer_title), style.text);
         applyTextColor(activity.findViewById(R.id.drawer_subtitle), style.mutedText);
+        applyTextColor(activity.findViewById(R.id.drawer_sessions_label), style.mutedText);
         applyTextColor(activity.findViewById(R.id.toggle_keyboard_button), style.text);
         applyTextColor(activity.findViewById(R.id.new_session_button), style.accent);
+
+        View logoBadge = activity.findViewById(R.id.drawer_logo_badge);
+        if (logoBadge != null) logoBadge.setBackgroundTintList(ColorStateList.valueOf(style.accent));
+        applyTextColor(activity.findViewById(R.id.drawer_logo_letter), style.background);
+
         applyFloatingButton(activity.findViewById(R.id.open_drawer_button), style.surface, style.text);
         applyFloatingButton(activity.findViewById(R.id.quick_actions_button), style.accent, style.background);
     }

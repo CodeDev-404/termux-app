@@ -1,3 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="session_card_background">#161C24</color>
+    <color name="session_card_stroke">#243140</color>
+    <color name="session_card_active_background">#123A4A</color>
+    <color name="session_card_active_stroke">#55D6FF</color>
+    <color name="session_status_dot_running">#6DEB89</color>
+    <color name="drawer_logo_badge_background">#55D6FF</color>
 </resources>
